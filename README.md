@@ -5,6 +5,7 @@ Microservice system for menaging and recommendating books
 ## Microserwises
 
 - `bookservice` – primary CRUD for the books
+- `userservice` – primary CRUD for the users
 
 ## Requirements
 
