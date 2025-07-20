@@ -6,6 +6,7 @@ Microservice system for menaging and recommendating books
 
 - `bookservice` – primary CRUD for the books
 - `userservice` – primary CRUD for the users
+- `reviewservice` – primary CRUD for the reviews
 
 ## Requirements
 
@@ -13,9 +14,3 @@ Microservice system for menaging and recommendating books
 - Maven
 - PostgreSQL
 
-## Run
-
-```bash
-cd bookservice
-./mvnw spring-boot:run
-```

@@ -1,5 +1,6 @@
 package com.example.reviewservice.controller;
 
+import com.example.reviewservice.dto.EnrichedReviewDto;
 import com.example.reviewservice.dto.ReviewDto;
 import com.example.reviewservice.entity.Review;
 import com.example.reviewservice.service.ReviewService;
@@ -41,6 +42,16 @@ public class ReviewController {
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
         return ResponseEntity.ok(reviewService.getReviewById(id));
+    }
+
+    @GetMapping("/enriched")
+    public ResponseEntity<List<EnrichedReviewDto>> getAllEnrichedReviews() {
+        return ResponseEntity.ok(reviewService.getAllEnrichedReviews());
+    }
+
+    @GetMapping("/enriched/{id}")
+    public ResponseEntity<EnrichedReviewDto> getEnrichedReviewById(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.getEnrichedReviewById(id));
     }
 
     @PutMapping("/{id}")

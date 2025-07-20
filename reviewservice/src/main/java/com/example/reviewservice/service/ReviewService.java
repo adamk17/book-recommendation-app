@@ -1,6 +1,9 @@
 package com.example.reviewservice.service;
 
+import com.example.reviewservice.dto.BookDto;
+import com.example.reviewservice.dto.EnrichedReviewDto;
 import com.example.reviewservice.dto.ReviewDto;
+import com.example.reviewservice.dto.UserDto;
 import com.example.reviewservice.entity.Review;
 import com.example.reviewservice.exception.ReviewNotFoundException;
 import com.example.reviewservice.repository.ReviewRepository;
@@ -36,6 +39,36 @@ public class ReviewService {
                 .createdAt(LocalDateTime.now())
                 .build();
         return reviewRepository.save(review);
+    }
+
+    public List<EnrichedReviewDto> getAllEnrichedReviews() {
+        return reviewRepository.findAll().stream()
+                .map(this::mapToEnrichedDto)
+                .toList();
+    }
+
+    public EnrichedReviewDto getEnrichedReviewById(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException(id));
+        return mapToEnrichedDto(review);
+    }
+
+    private EnrichedReviewDto mapToEnrichedDto(Review review) {
+        BookDto book = bookClient.getBookById(review.getBookId());
+        UserDto user = userClient.getUserById(review.getUserId());
+
+        return new EnrichedReviewDto(
+                review.getId(),
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                review.getRating(),
+                review.getComment(),
+                review.getCreatedAt()
+        );
     }
 
 

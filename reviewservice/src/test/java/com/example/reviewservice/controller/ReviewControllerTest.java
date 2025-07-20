@@ -1,5 +1,6 @@
 package com.example.reviewservice.controller;
 
+import com.example.reviewservice.dto.EnrichedReviewDto;
 import com.example.reviewservice.dto.ReviewDto;
 import com.example.reviewservice.entity.Review;
 import com.example.reviewservice.service.ReviewService;
@@ -102,5 +103,57 @@ class ReviewControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(reviewService, times(1)).deleteReview(1L);
+    }
+
+    @Test
+    void shouldReturnAllEnrichedReviews() throws Exception {
+        EnrichedReviewDto enriched = new EnrichedReviewDto(
+                1L,
+                10L,
+                "Book Title",
+                "Book Author",
+                20L,
+                "john_doe",
+                "john@example.com",
+                5,
+                "Awesome book!",
+                LocalDateTime.now()
+        );
+
+        when(reviewService.getAllEnrichedReviews()).thenReturn(List.of(enriched));
+
+        mockMvc.perform(get("/api/v1/reviews/enriched"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].bookId").value(10L))
+                .andExpect(jsonPath("$[0].bookTitle").value("Book Title"))
+                .andExpect(jsonPath("$[0].userId").value(20L))
+                .andExpect(jsonPath("$[0].username").value("john_doe"));
+    }
+
+    @Test
+    void shouldReturnEnrichedReviewById() throws Exception {
+        EnrichedReviewDto enriched = new EnrichedReviewDto(
+                2L,
+                11L,
+                "Another Book",
+                "Author Name",
+                21L,
+                "alice",
+                "alice@example.com",
+                4,
+                "Very good",
+                LocalDateTime.now()
+        );
+
+        when(reviewService.getEnrichedReviewById(2L)).thenReturn(enriched);
+
+        mockMvc.perform(get("/api/v1/reviews/enriched/2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(2L))
+                .andExpect(jsonPath("$.bookId").value(11L))
+                .andExpect(jsonPath("$.bookTitle").value("Another Book"))
+                .andExpect(jsonPath("$.userId").value(21L))
+                .andExpect(jsonPath("$.username").value("alice"));
     }
 }
