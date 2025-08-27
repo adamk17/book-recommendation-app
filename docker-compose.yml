@@ -1,0 +1,97 @@
+name: book-recommendation-app
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: br_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db-init.sql:/docker-entrypoint-initdb.d/01-db-init.sql:ro
+
+  bookservice:
+    build:
+      context: ./bookservice
+      dockerfile: Dockerfile
+    container_name: br_book
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/books_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+
+  userservice:
+    build:
+      context: ./userservice
+      dockerfile: Dockerfile
+    container_name: br_user
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/userservice_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8081"
+
+  reviewservice:
+    build:
+      context: ./reviewservice
+      dockerfile: Dockerfile
+    container_name: br_review
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bookservice:
+        condition: service_started
+      userservice:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/reviewservice_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+      APP_BOOKS_URL: http://bookservice:8080
+      APP_USERS_URL: http://userservice:8081
+    ports:
+      - "8082:8082"
+
+  recommendationservice:
+    build:
+      context: ./recommendationservice
+      dockerfile: Dockerfile
+    container_name: br_reco
+    depends_on:
+      bookservice:
+        condition: service_started
+      reviewservice:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      APP_BOOKS_URL: http://bookservice:8080
+      APP_REVIEWS_URL: http://reviewservice:8082
+    ports:
+      - "8083:8083"
+
+volumes:
+  pgdata:

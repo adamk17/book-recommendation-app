@@ -10,6 +10,8 @@ This microservice handles CRUD operations for books. It is a part of the Book Re
 - Swagger UI documentation
 - Unit and integration tests
 
+---
+
 ## 🚀 Run Locally
 
 Requirements:
@@ -22,6 +24,32 @@ Requirements:
 ```
 
 App will be available at `http://localhost:8080`
+
+## 🐳 Run with Docker Compose
+
+When using Docker Compose from the root project:
+
+```bash
+docker compose up bookservice --build
+```
+
+This will build and start the **bookservice** container (together with PostgreSQL and other requirements services). Bookservice will be available at:
+
+```bash
+http://localhost:8080
+```
+
+### Stopping
+
+```bash
+docker compose down
+```
+
+### Reset with database removal
+
+```bash
+docker compose down -v
+```
 
 ## 📚 API Documentation (Swagger)
 
@@ -43,14 +71,10 @@ Includes:
 - Unit tests (`BookServiceTest`)
 - Integration tests (`BookControllerIntegrationTest`)
 
-## 🗂 Endpoints (Example)
+## 🗂 Endpoints
 
 - `POST /api/v1/books`
 - `GET /api/v1/books`
 - `GET /api/v1/books/{id}`
 - `PUT /api/v1/books/{id}`
 - `DELETE /api/v1/books/{id}`
-
-## ⚙️ Database Configuration
-
-Default PostgreSQL config in `application.yaml`:

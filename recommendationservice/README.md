@@ -27,7 +27,33 @@ This microservice generates personalized book recommendations based on user revi
 ./mvnw spring-boot:run
 ```
 
-Application will be available at: `http://localhost:8083` (or as configured in `application.yaml`)
+Application will be available at: `http://localhost:8083`
+
+## 🐳 Run with Docker Compose
+
+When using Docker Compose from the root project:
+
+```bash
+docker compose up recommendationservice --build
+```
+
+This will build and start the **recommendationservice** container (together with PostgreSQL and other requirements services). Recommendationservice will be available at:
+
+```bash
+http://localhost:8083
+```
+
+### Stopping
+
+```bash
+docker compose down
+```
+
+### Reset with database removal
+
+```bash
+docker compose down -v
+```
 
 ## 📚 API Documentation (Swagger)
 
@@ -52,7 +78,3 @@ Test coverage includes:
 ## 🗂 API Endpoints
 
 - `GET /api/v1/recommendations/{userId}` → returns a list of recommended books the user hasn't reviewed yet
-
-## ⚙️ Database Configuration
-
-Default PostgreSQL config in `application.yaml`:

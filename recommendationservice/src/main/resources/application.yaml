@@ -1,6 +1,12 @@
 spring:
   application:
-    name: user-service
+    name: recommendation-service
 
 server:
   port: 8083
+
+app:
+  books:
+    url: http://localhost:8080
+  reviews:
+    url: http://localhost:8082

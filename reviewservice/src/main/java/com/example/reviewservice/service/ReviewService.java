@@ -93,11 +93,14 @@ public class ReviewService {
         return reviewRepository.save(existing);
     }
 
-
     public void deleteReview(Long id) {
         if (!reviewRepository.existsById(id)) {
             throw new ReviewNotFoundException(id);
         }
         reviewRepository.deleteById(id);
+    }
+
+    public List<Review> getReviewsByUser(Long userId) {
+        return reviewRepository.findByUserId(userId);
     }
 }

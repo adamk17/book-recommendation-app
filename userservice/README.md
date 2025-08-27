@@ -26,7 +26,33 @@ This microservice handles user management operations. It is a part of the **Book
 ./mvnw spring-boot:run
 ```
 
-Application will be available at: `http://localhost:8081` (or as configured in `application.yaml`)
+Application will be available at: `http://localhost:8081`
+
+## 🐳 Run with Docker Compose
+
+When using Docker Compose from the root project:
+
+```bash
+docker compose up userservice --build
+```
+
+This will build and start the **userservice** container (together with PostgreSQL and other requirement services). Userservice will be available at:
+
+```bash
+http://localhost:8081
+```
+
+### Stopping
+
+```bash
+docker compose down
+```
+
+### Reset with database removal
+
+```bash
+docker compose down -v
+```
 
 ## 📚 API Documentation (Swagger)
 
@@ -55,15 +81,3 @@ Test coverage includes:
 - `GET /api/v1/users/{id}`
 - `PUT /api/v1/users/{id}`
 - `DELETE /api/v1/users/{id}`
-
-## ⚙️ Database Configuration
-
-Default PostgreSQL settings are stored in `src/main/resources/application.yaml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/userservice_db
-    username: your_user
-    password: your_password
-```

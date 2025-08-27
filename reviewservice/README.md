@@ -27,7 +27,33 @@ This microservice handles **review management** for books. It is a part of the *
 ./mvnw spring-boot:run
 ```
 
-Application will be available at: `http://localhost:8082` (or as configured in `application.yaml`)
+Application will be available at: `http://localhost:8082`
+
+## 🐳 Run with Docker Compose
+
+When using Docker Compose from the root project:
+
+```bash
+docker compose up reviewservice --build
+```
+
+This will build and start the **reviewservice** container (together with PostgreSQL and other requirements services). Reviewservice will be available at:
+
+```bash
+http://localhost:8082
+```
+
+### Stopping
+
+```bash
+docker compose down
+```
+
+### Reset with database removal
+
+```bash
+docker compose down -v
+```
 
 ## 📚 API Documentation (Swagger)
 
@@ -56,15 +82,4 @@ Test coverage includes:
 - `GET /api/v1/reviews/{id}`
 - `PUT /api/v1/reviews/{id}`
 - `DELETE /api/v1/reviews/{id}`
-
-## ⚙️ Database Configuration
-
-Default PostgreSQL settings are stored in `src/main/resources/application.yaml`:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/reviewservice_db
-    username: your_user
-    password: your_password
-```
+- `GET /api/v1/reviews/users/{id}`
