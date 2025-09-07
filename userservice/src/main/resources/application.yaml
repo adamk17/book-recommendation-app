@@ -18,5 +18,10 @@ spring:
   application:
     name: user-service
 
+security:
+  jwt:
+    secret: YOUR_GENERATED_SECRET
+    ttl-seconds: 900
+
 server:
   port: 8081

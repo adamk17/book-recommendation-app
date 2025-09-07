@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -21,12 +22,15 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserService userService;
 
     @Test
     void shouldReturnAllUsers() {
-        List<User> users = List.of(new User(1L, "john", "john@example.com", "john john"));
+        List<User> users = List.of(new User(1L, "john", "john@example.com", "john john", "password", null));
         when(userRepository.findAll()).thenReturn(users);
 
         List<User> result = userService.getAllUsers();
@@ -36,7 +40,7 @@ class UserServiceTest {
 
     @Test
     void shouldReturnUserById() {
-        User user = new User(1L, "john", "john@example.com", "john john");
+        User user = new User(1L, "john", "john@example.com", "john john", "password", null);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         User result = userService.getUserById(1L);
@@ -54,8 +58,8 @@ class UserServiceTest {
 
     @Test
     void shouldCreateUser() {
-        UserDto dto = new UserDto("john", "john@example.com", "john john");
-        User saved = new User(1L, "john", "john@example.com", "john john");
+        UserDto dto = new UserDto("john", "john@example.com", "john john", "password");
+        User saved = new User(1L, "john", "john@example.com", "john john", "password", null);
         when(userRepository.save(any())).thenReturn(saved);
 
         User result = userService.createUser(dto);
@@ -65,11 +69,11 @@ class UserServiceTest {
 
     @Test
     void shouldUpdateUser() {
-        User existing = new User(1L, "old", "old@example.com", "john john");
+        User existing = new User(1L, "old", "old@example.com", "john john", "password", null);
         when(userRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(userRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        User updated = new User(1L, "new", "new@example.com", "john john");
+        User updated = new User(1L, "new", "new@example.com", "john john", "password", null);
         User result = userService.updateUser(1L, updated);
 
         assertThat(result.getUsername()).isEqualTo("new");
