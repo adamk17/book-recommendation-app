@@ -33,7 +33,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_PROFILES_ACTIVE: docker
-      SECURITY_JWT_SECRET: "AaFmPWcUeqpOpN9wNW6chPYKcgv85dleqE/8zzRLNXA="
+      SECURITY_JWT_SECRET: YOUR_SECRET
     ports:
       - "8080:8080"
 
@@ -51,7 +51,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_PROFILES_ACTIVE: docker
-      SECURITY_JWT_SECRET: "AaFmPWcUeqpOpN9wNW6chPYKcgv85dleqE/8zzRLNXA="
+      SECURITY_JWT_SECRET: YOUR_SECRET
     ports:
       - "8081:8081"
 
@@ -73,7 +73,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_PROFILES_ACTIVE: docker
-      SECURITY_JWT_SECRET: "AaFmPWcUeqpOpN9wNW6chPYKcgv85dleqE/8zzRLNXA="
+      SECURITY_JWT_SECRET: YOUR_SECRET
       APP_BOOKS_URL: http://bookservice:8080
       APP_USERS_URL: http://userservice:8081
     ports:
@@ -91,7 +91,8 @@ services:
         condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SECURITY_JWT_SECRET: "AaFmPWcUeqpOpN9wNW6chPYKcgv85dleqE/8zzRLNXA="
+      SECURITY_JWT_SECRET: YOUR_SECRET
+    
       APP_BOOKS_URL: http://bookservice:8080
       APP_REVIEWS_URL: http://reviewservice:8082
     ports:
