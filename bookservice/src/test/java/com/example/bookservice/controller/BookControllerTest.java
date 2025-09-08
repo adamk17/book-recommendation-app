@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class BookControllerTest {
 
     @Autowired
@@ -43,54 +44,59 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllBooks() throws Exception {
         when(bookService.getAllBooks()).thenReturn(List.of(sampleBook));
 
-        mockMvc.perform(get("/books"))
+        mockMvc.perform(get("/api/v1/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].title").value("Sample Title"));
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnBookById() throws Exception {
         when(bookService.getBookById(1L)).thenReturn(Optional.of(sampleBook));
 
-        mockMvc.perform(get("/books/1"))
+        mockMvc.perform(get("/api/v1/books/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Sample Title"));
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnNotFoundForMissingBook() throws Exception {
         when(bookService.getBookById(99L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/books/99"))
+        mockMvc.perform(get("/api/v1/books/99"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreateBook() throws Exception {
         Book inputBook = new Book(null, "New Book", "New Author", "Desc", "ISBN");
         Book savedBook = new Book(1L, "New Book", "New Author", "Desc", "ISBN");
 
         when(bookService.saveBook(any(Book.class))).thenReturn(savedBook);
 
-        mockMvc.perform(post("/books")
+        mockMvc.perform(post("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(inputBook)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value("New Book"));
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdateBook() throws Exception {
         Book updatedBook = new Book(1L, "Updated", "Updated Author", "Desc", "ISBN");
 
         when(bookService.updateBook(eq(1L), any(Book.class))).thenReturn(Optional.of(updatedBook));
 
-        mockMvc.perform(put("/books/1")
+        mockMvc.perform(put("/api/v1/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedBook)))
                 .andExpect(status().isOk())
@@ -98,30 +104,33 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnNotFoundWhenUpdatingMissingBook() throws Exception {
         Book updatedBook = new Book(1L, "Updated", "Updated Author", "Desc", "ISBN");
 
         when(bookService.updateBook(eq(1L), any(Book.class))).thenReturn(Optional.empty());
 
-        mockMvc.perform(put("/books/1")
+        mockMvc.perform(put("/api/v1/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedBook)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDeleteBook() throws Exception {
         when(bookService.deleteBook(1L)).thenReturn(true);
 
-        mockMvc.perform(delete("/books/1"))
+        mockMvc.perform(delete("/api/v1/books/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnNotFoundWhenDeletingMissingBook() throws Exception {
         when(bookService.deleteBook(1L)).thenReturn(false);
 
-        mockMvc.perform(delete("/books/1"))
+        mockMvc.perform(delete("/api/v1/books/1"))
                 .andExpect(status().isNotFound());
     }
 

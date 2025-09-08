@@ -12,6 +12,7 @@ This microservice handles **review management** for books. It is a part of the *
 - Centralized exception handling with `@ControllerAdvice`
 - Swagger UI for API documentation
 - Unit and integration tests with MockMvc
+- - 🔐 JWT-based authentication and role-based authorization (Admin/User)
 
 ## 🚀 Run Locally
 
@@ -77,9 +78,9 @@ Test coverage includes:
 
 ## 🗂 API Endpoints
 
-- `POST /api/v1/reviews`
-- `GET /api/v1/reviews`
-- `GET /api/v1/reviews/{id}`
-- `PUT /api/v1/reviews/{id}`
-- `DELETE /api/v1/reviews/{id}`
-- `GET /api/v1/reviews/users/{id}`
+- `POST /api/v1/reviews` → Admin and User
+- `GET /api/v1/reviews` → Admin only
+- `GET /api/v1/reviews/{id}` → Admin and User
+- `PUT /api/v1/reviews/{id}` → Admin and User
+- `DELETE /api/v1/reviews/{id}` → Admin and User
+- `GET /api/v1/reviews/users/{id}` → Admin and User

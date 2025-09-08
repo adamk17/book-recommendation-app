@@ -4,10 +4,13 @@ import com.example.recommendationservice.dto.RecommendationDto;
 import com.example.recommendationservice.service.RecommendationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +20,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(RecommendationController.class)
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false)
 class RecommendationControllerTest {
 
     @Autowired
@@ -38,6 +42,7 @@ class RecommendationControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnRecommendationsForUser() throws Exception {
         var rec = new RecommendationDto(1L, "Clean Code", "Robert C. Martin");
         when(recommendationService.getRecommendationsForUser(42L))

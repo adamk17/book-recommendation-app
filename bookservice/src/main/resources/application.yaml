@@ -18,5 +18,9 @@ spring:
   application:
     name: book-service
 
+security:
+  jwt:
+    secret: YOUR_SECRET
+
 server:
   port: 8080

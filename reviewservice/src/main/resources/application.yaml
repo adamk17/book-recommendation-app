@@ -18,6 +18,11 @@ spring:
   application:
     name: review-service
 
+security:
+  jwt:
+    secret: YOUR_SECRET
+
+
 server:
   port: 8082
 

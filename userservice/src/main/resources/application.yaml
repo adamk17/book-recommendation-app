@@ -20,7 +20,7 @@ spring:
 
 security:
   jwt:
-    secret: YOUR_GENERATED_SECRET
+    secret: YOUR_SECRET
     ttl-seconds: 900
 
 server:

@@ -2,6 +2,7 @@ package com.example.recommendationservice.controller;
 
 import com.example.recommendationservice.dto.RecommendationDto;
 import com.example.recommendationservice.service.RecommendationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class RecommendationController {
         this.recommendationService = recommendationService;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or @jwt.isSelf(#userId, authentication)")
     @GetMapping("/{userId}")
     public List<RecommendationDto> getRecommendations(@PathVariable Long userId) {
         return recommendationService.getRecommendationsForUser(userId);

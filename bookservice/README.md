@@ -8,7 +8,8 @@ This microservice handles CRUD operations for books. It is a part of the Book Re
 - PostgreSQL database integration (via Spring Data JPA)
 - Input validation
 - Swagger UI documentation
-- Unit and integration tests
+- Unit and integration tests with MockMvc
+- - 🔐 JWT-based authentication and role-based authorization (Admin/User)
 
 ---
 
@@ -73,8 +74,8 @@ Includes:
 
 ## 🗂 Endpoints
 
-- `POST /api/v1/books`
-- `GET /api/v1/books`
-- `GET /api/v1/books/{id}`
-- `PUT /api/v1/books/{id}`
-- `DELETE /api/v1/books/{id}`
+- `POST /api/v1/books` → Admin only
+- `GET /api/v1/books` → Admin and User
+- `GET /api/v1/books/{id}` → Admin and User
+- `PUT /api/v1/books/{id}` → Admin only
+- `DELETE /api/v1/books/{id}` → Admin only

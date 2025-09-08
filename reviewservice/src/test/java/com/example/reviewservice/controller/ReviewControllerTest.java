@@ -6,10 +6,12 @@ import com.example.reviewservice.entity.Review;
 import com.example.reviewservice.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +22,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ReviewController.class)
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false)
 class ReviewControllerTest {
 
     @Autowired
@@ -41,6 +44,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllReviews() throws Exception {
         Review review = Review.builder()
                 .id(1L).bookId(1L).userId(2L).rating(5).comment("Great!")
@@ -53,6 +57,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnReviewById() throws Exception {
         Review review = Review.builder()
                 .id(1L).bookId(1L).userId(2L).rating(4).comment("Nice")
@@ -65,6 +70,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreateReview() throws Exception {
         ReviewDto dto = new ReviewDto(1L, 2L, 5, "Excellent!");
         Review saved = Review.builder()
@@ -80,6 +86,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdateReview() throws Exception {
         ReviewDto dto = new ReviewDto(1L, 2L, 3, "Updated comment");
         Review updated = Review.builder()
@@ -96,6 +103,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDeleteReview() throws Exception {
         doNothing().when(reviewService).deleteReview(1L);
 
@@ -106,6 +114,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllEnrichedReviews() throws Exception {
         EnrichedReviewDto enriched = new EnrichedReviewDto(
                 1L,
@@ -132,6 +141,7 @@ class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnEnrichedReviewById() throws Exception {
         EnrichedReviewDto enriched = new EnrichedReviewDto(
                 2L,

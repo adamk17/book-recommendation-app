@@ -10,6 +10,7 @@ This microservice generates personalized book recommendations based on user revi
 - Centralized exception handling
 - Swagger UI for API documentation
 - Unit and integration tests with JUnit + MockMvc
+- - 🔐 JWT-based authentication and role-based authorization (Admin/User)
 
 ## 🚀 Run Locally
 

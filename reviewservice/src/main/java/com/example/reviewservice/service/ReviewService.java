@@ -103,4 +103,11 @@ public class ReviewService {
     public List<Review> getReviewsByUser(Long userId) {
         return reviewRepository.findByUserId(userId);
     }
+
+    public Long getReviewOwnerId(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .map(Review::getUserId)
+                .orElse(null);
+    }
+
 }
